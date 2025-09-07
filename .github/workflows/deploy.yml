@@ -36,7 +36,7 @@ jobs:
           file: ./Dockerfile
           push: true
           tags: |
-            rafli27/react-frontend:latest
+            rafli27/react-frontend:2
 
       # - name: Build Docker image
       #   run: |
