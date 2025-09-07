@@ -77,13 +77,7 @@ const LoginForm = ({ onLogin }) => {
         </button>
 
         <div className="demo-credentials">
-          <p>Demo credentials:</p>
-          <p>
-            Username: <strong>admin</strong> or <strong>user</strong>
-          </p>
-          <p>
-            Password: <strong>password</strong>
-          </p>
+          <p>Rahasia ah</p>
         </div>
       </form>
     </div>
