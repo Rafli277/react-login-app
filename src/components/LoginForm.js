@@ -9,13 +9,16 @@ const LoginForm = ({ onLogin }) => {
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
+  // Gunakan environment variable, fallback ke /api
+  const API_URL = process.env.REACT_APP_API_URL || '/api';
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
     setError('');
 
     try {
-      const response = await fetch('http://localhost:8080/api/auth/login', {
+      const response = await fetch(`${API_URL}/auth/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -27,7 +30,7 @@ const LoginForm = ({ onLogin }) => {
       const data = await response.json();
 
       if (response.ok && data.token) {
-        // Save to localStorage
+        // Save ke localStorage
         localStorage.setItem('token', data.token);
         localStorage.setItem('username', data.username);
         localStorage.setItem('role', data.role);
@@ -38,7 +41,7 @@ const LoginForm = ({ onLogin }) => {
         setError(data.message || 'Login failed. Please check credentials.');
       }
     } catch (error) {
-      setError('Network error. Please check if backend is running on port 8080.');
+      setError('Network error. Please check if backend is reachable.');
       console.error('Login error:', error);
     } finally {
       setIsLoading(false);
@@ -81,10 +84,6 @@ const LoginForm = ({ onLogin }) => {
           <p>
             Password: <strong>password</strong>
           </p>
-        </div>
-
-        <div className="backend-info">
-          <p>🔌 Make sure Spring Boot backend is running on port 8080</p>
         </div>
       </form>
     </div>
