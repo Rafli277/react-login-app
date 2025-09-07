@@ -77,7 +77,7 @@ const LoginForm = ({ onLogin }) => {
         </button>
 
         <div className="demo-credentials">
-          <p>Testing1</p>
+          <p>Testing2</p>
         </div>
       </form>
     </div>
