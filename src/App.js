@@ -1,23 +1,48 @@
-import logo from './logo.svg';
+import React, { useState, useEffect } from 'react';
+import LoginForm from './components/LoginForm';
+import Dashboard from './components/Dashboard';
+import ProtectedRoute from './components/ProtectedRoute';
 import './App.css';
 
 function App() {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [username, setUsername] = useState('');
+
+  useEffect(() => {
+    // Check if user is logged in from localStorage
+    const savedUser = localStorage.getItem('username');
+    const token = localStorage.getItem('token');
+
+    if (savedUser && token) {
+      setIsAuthenticated(true);
+      setUsername(savedUser);
+    }
+  }, []);
+
+  const handleLogin = (user) => {
+    setIsAuthenticated(true);
+    setUsername(user);
+    localStorage.setItem('user', user);
+  };
+
+  const handleLogout = () => {
+    setIsAuthenticated(false);
+    setUsername('');
+    localStorage.removeItem('user');
+    localStorage.removeItem('token');
+    localStorage.removeItem('username');
+    localStorage.removeItem('role');
+  };
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      {!isAuthenticated ? (
+        <LoginForm onLogin={handleLogin} />
+      ) : (
+        <ProtectedRoute isAuthenticated={isAuthenticated}>
+          <Dashboard username={username} onLogout={handleLogout} />
+        </ProtectedRoute>
+      )}
     </div>
   );
 }
