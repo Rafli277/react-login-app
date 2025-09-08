@@ -77,7 +77,7 @@ const LoginForm = ({ onLogin }) => {
         </button>
 
         <div className="demo-credentials">
-          <p>Hayo apa?</p>
+          <p>Hayo</p>
         </div>
       </form>
     </div>
