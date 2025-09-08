@@ -41,10 +41,17 @@ jobs:
       - name: Deploy to Server
         uses: appleboy/ssh-action@v0.1.6
         with:
-          host: ${{ secrets.SERVER_IP }}
+          host: ${{ secrets.SERVER_HOST }}
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
           script: |
             cd /opt/repo-infra
-            docker compose pull frontend
-            docker compose up -d frontend
+            #login Dockerhub
+            echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ vars.DOCKERHUB_USERNAME }}" --password-stdin
+            # Pull image 
+            docker pull rafli27/react-frontend:latest
+            # Restart frontend container
+            docker ps -a
+            docker-compose up -d --no-deps frontend
+            # cek log 
+            docker-compose logs -f frontend --tail=20
