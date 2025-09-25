@@ -21,6 +21,18 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@master
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        with:
+          args: >
+            -Dsonar.projectKey=my-org_my-project
+            -Dsonar.organization=my-org
+            -Dsonar.sources=src
+            -Dsonar.language=js
+            -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
+
       - name: Build React App
         run: npm run build
 
