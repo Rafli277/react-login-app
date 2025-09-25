@@ -1,7 +1,6 @@
 name: Build and Deploy Frontend
 
 on:
-  workflow_dispatch:
   push:
     branches: [main]
 
@@ -27,8 +26,8 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         with:
           args: >
-            -Dsonar.projectKey=my-org_my-project
-            -Dsonar.organization=my-org
+            -Dsonar.projectKey=react-login-app
+            -Dsonar.organization=rafli277
             -Dsonar.sources=src
             -Dsonar.language=js
             -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
