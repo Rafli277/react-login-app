@@ -29,7 +29,6 @@ jobs:
             -Dsonar.projectKey=Rafli277_react-login-app
             -Dsonar.organization=rafli277
             -Dsonar.sources=src
-            -Dsonar.language=js
             -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
 
       - name: Build React App
