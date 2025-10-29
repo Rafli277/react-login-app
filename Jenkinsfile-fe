@@ -1,0 +1,56 @@
+//GIT CHECKOUT
+def git_credentials_id = scm.userRemoteConfigs[0].credentialsId
+def git_repo = scm.userRemoteConfigs[0].url
+def git_branch = scm.branches[0].name
+//PREPARE
+def docker_credentials = 'docker-rafli'
+tags = 'testing'
+//DOCKER
+def docker_url = "registry-1.docker.io"
+
+node ('master'){
+    stage('Checkout') {
+        git url: "${git_repo}", branch: "${git_branch}", credentialsId: "${git_credentials_id}"
+
+    }
+
+    stage('copy dockerfile'){
+        configFileProvider([configFile(fileId: "fe-build.dockerfile", targetLocation: 'Dockerfile')]) { }
+    }   
+
+    stage('Docker image') {
+        sh """
+        echo "Building Docker image..."
+        docker build -t rafli27/react-frontend:${tags} .
+        """
+    }
+
+    stage('Push image') {
+        withEnv(["CREDENTIALID=${docker_credentials}"]) {
+          withCredentials([[$class: 'UsernamePasswordMultiBinding',
+                credentialsId: "${CREDENTIALID}",
+                usernameVariable: 'docker_username', passwordVariable: 'docker_password']]) {
+
+                sh """
+                    set -eux
+                    echo " Login Docker registry..."
+                    docker login --username=${docker_username} --password='${docker_password}' ${docker_url}
+                """
+
+                sh """
+                    echo "Pushing image..."
+                    docker push rafli27/react-frontend:${tags}
+                """
+                sh """
+                    docker rmi rafli27/react-frontend:${tags}
+                """
+                }
+        }
+    }
+
+    stage ('OpenShift Build'){
+        sh """
+            echo "deploy to kube"
+        """
+    }
+}
